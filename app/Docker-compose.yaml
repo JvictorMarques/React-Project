@@ -1,1 +1,28 @@
 services:
+  db:
+    image: mysql
+    container_name: mysql-db
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    networks:
+      - react-network
+  
+  react-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: react-app
+    depends_on:
+      - db
+    ports:
+      - 3000:3000
+    networks:
+      - react-network
+
+networks:
+  react-network:
+    driver: bridge

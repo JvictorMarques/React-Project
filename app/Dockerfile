@@ -17,8 +17,4 @@ WORKDIR /usr/src/app
 COPY --from=build /usr/src/app/package.json ./
 COPY --from=build /usr/src/app/node_modules ./node_modules
 
-ARG port=3000
-
-EXPOSE ${port}
-
 CMD [ "yarn", "run", "start" ]
