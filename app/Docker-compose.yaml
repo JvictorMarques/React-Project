@@ -3,6 +3,8 @@ services:
     image: mysql
     container_name: mysql-db
     restart: always
+    volumes:
+      - db:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
@@ -26,3 +28,6 @@ services:
 networks:
   react-network:
     driver: bridge
+
+volumes:
+  db:
