@@ -10,7 +10,7 @@ COPY . .
 
 RUN yarn run build && yarn cache clean
 
-FROM node:18-alpine
+FROM node:18-alpine AS prod
 
 WORKDIR /usr/src/app
 
