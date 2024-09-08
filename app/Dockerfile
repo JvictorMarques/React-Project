@@ -1,25 +1,31 @@
-# Etapa de build
+# Etapa 1: Build da aplicação React com Vite
 FROM node:18-alpine AS build
 
-WORKDIR /usr/src/app
+# Definir o diretório de trabalho
+WORKDIR /app
 
+# Copiar os arquivos de configuração e dependências
 COPY package.json yarn.lock ./
 
-RUN yarn install --frozen-lockfile
+# Instalar dependências usando Yarn
+RUN yarn install
 
+# Copiar o restante do código da aplicação
 COPY . .
 
-RUN yarn run build && yarn cache clean
+# Build da aplicação para produção
+RUN yarn build
 
-# Etapa de produção
-FROM node:18-alpine AS prod
+# Etapa 2: Configuração do NGINX para servir os arquivos
+FROM nginx:alpine AS final
 
-WORKDIR /usr/src/app
+# Copiar a build da aplicação para o diretório de assets do NGINX
+COPY --from=build /app/build /usr/share/nginx/html
 
-COPY --from=build /usr/src/app/package.json ./
-COPY --from=build /usr/src/app/build ./build
-COPY --from=build /usr/src/app/node_modules ./node_modules
+# Copiar um arquivo de configuração NGINX personalizado, se necessário
+# COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 3000
+# Expor a porta padrão do NGINX
+EXPOSE 80
 
-CMD [ "yarn", "run", "start" ]
+CMD ["nginx", "-g", "daemon off;"]
