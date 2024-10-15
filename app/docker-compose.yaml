@@ -14,7 +14,9 @@ services:
       - react-network
   
   react-app:
-    image: ghcr.io/jvictormarques/react-image:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: react-app
     depends_on:
       - db
