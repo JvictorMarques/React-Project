@@ -10,6 +10,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    
     - name: Generate TAG
       id: generate_tag
       run: |
@@ -20,5 +21,5 @@ jobs:
       run: |
         docker login --username jvictormarques --password ${{ secrets.GHCR_PSWD }} ghcr.io
         docker build ./app --tag ghcr.io/jvictormarques/react-image:latest
-        docker tag ghcr.io/jvictormarques/react-image:${{ steps.generate_tag.outputs.sha }} ghcr.io/jvictormarques/react-image:latest
-        docker push --all-tags ghcr.io/jvictormarques/react-image
+        docker tag ghcr.io/jvictormarques/react-image:latest ghcr.io/jvictormarques/react-image:${{ steps.generate_tag.outputs.sha }}
+        docker push ghcr.io/jvictormarques/react-image --all-tags
